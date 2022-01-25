@@ -20,17 +20,25 @@
 <body>
     <!-- Formulário -->
     <div class="container" style="margin: 50px;">
+        <h3>
+            Canvas LMS API
+            <small class="text-muted">Convide e visualize alunos cadastrados em seu curso!</small>
+        </h3>
+
         <form>
             <div class="form-group">
-                <label for="input-email-student">Endereço de email</label>
+                <label for="input-email-student">Convidar alunos para o curso:</label>
                 <input type="email" class="form-control" id="input-email-student" aria-describedby="emailHelp"
-                    placeholder="Seu email">
+                    placeholder="Digite aqui seu email">
             </div>
             <button type="submit" onclick="create_student()" class="btn btn-primary">Enviar</button>
         </form>
+        <h3 style="margin: 20px 0px 20px 0px;">
+            Após aceito o convite, o aluno aparecerá aqui!
+        </h3>
     </div>
     <!-- Tabela de Usuários -->
-    <div class="container" style="width: 70%">
+    <div class="container" style="width: 89vw">
         <table class="table" id="table-course">
             <thead>
                 <tr>
