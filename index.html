@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.1/css/dataTables.bootstrap5.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+</head>
+
+<body>
+    <!-- Formulário -->
+    <div class="container" style="margin: 50px;">
+        <form>
+            <div class="form-group">
+                <label for="input-email-student">Endereço de email</label>
+                <input type="email" class="form-control" id="input-email-student" aria-describedby="emailHelp"
+                    placeholder="Seu email">
+            </div>
+            <button type="submit" onclick="create_student()" class="btn btn-primary">Enviar</button>
+        </form>
+    </div>
+    <!-- Tabela de Usuários -->
+    <div class="container" style="width: 70%">
+        <table class="table" id="table-course">
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">E-mail</th>
+                    <th scope="col">Último Login</th>
+                    <th scope="col">Tipo</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</body>
+<script type="text/javascript" class="init">
+    let base_url = 'http://localhost:5000/'
+
+    function create_student() {
+        console.log("Entrou aqui")
+        let email = $('#input-email-student').val()
+        $.ajax({
+            url: `${base_url}?email=${email}`,
+            type: 'POST',
+            success: function (data) {
+                console.log(data)
+            }
+        })
+    }
+
+    $(document).ready(function () {
+        // Create a new DataTable object
+        let table = $('#table-course').DataTable({
+            "ajax": {
+                "url": base_url,
+                "dataSrc": ""
+            },
+            "columns": [
+                {
+                    "data": "short_name"
+                }, {
+                    "data": "email"
+                },
+                {
+                    "data": "last_activity_at"
+                },
+                {
+                    "data": "role"
+                }
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.11.4/i18n/pt_br.json"
+            }
+        });
+
+        // format the date column to be more human readable
+        table.on('draw', function () {
+            $('#table-course td:nth-child(3)').each(function () {
+                let d = new Date($(this).text());
+                if (!isNaN(d.getTime())) {
+                    $(this).text(d.toLocaleDateString('pt-BR'));
+                } else {
+                    $(this).text("Nunca Logado").css("color", "#ccc");;
+                }
+            });
+        });
+
+    }); 
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript"
+    src="https://cdn.datatables.net/1.11.1/js/dataTables.bootstrap5.min.js"></script>
+
+</html>
